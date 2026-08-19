@@ -39,7 +39,9 @@ jobs:
         run: npx ng build --configuration production --base-href /quranvidgen/
 
       - name: Copy index.html to 404.html for SPA Routing
-        run: cp dist/quran-vid-gen/index.html dist/quran-vid-gen/404.html
+        run: |
+          cp dist/quran-vid-gen/index.html dist/quran-vid-gen/404.html
+          touch dist/quran-vid-gen/.nojekyll
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
