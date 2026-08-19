@@ -1,0 +1,84 @@
+<div class="main-container">
+  <div class="title d-flex flex-column my-3 text-light text-center">
+    <h3 class="app-title">Quran Video Generator</h3>
+  </div>
+<div *ngIf="loaded;else progress">
+  <div class="row  mx-auto">
+    <div class="d-flex col-md-10 col-lg-8 col-xl-6 col-xxl-4 justify-content-center align-items-center flex-column mx-auto  mt-3 gap-3">
+
+
+      <p-dropdown [options]="suras" [optionLabel]="'surahName'" class="w-100" styleClass="w-100" [(ngModel)]="currentSurah" placeholder="Select a Surah" (onChange)="helper.SurahNumberRestrict(GetCurrentSurahNumber(),start,end)" [dropdownIcon]="'pi pi-book'" [optionValue]="'surahName'" [filter]="true" ></p-dropdown>
+      <p-dropdown [options]="reciters" [optionLabel]="'name'" class="w-100" styleClass="w-100" [(ngModel)]="currentReciterId" placeholder="Select a Reciter" [dropdownIcon]="'pi pi-user'" [optionValue]="'id'"  ></p-dropdown>
+
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon">
+          <i class="pi pi-play"></i>
+      </span>
+        <input #start type="number" [min]="1" (input)="helper.InputNumberRestrict(start)" pInputText placeholder="Start Ayah" />
+        <span class="ms-2 rounded-start p-inputgroup-addon">
+          <i class="pi pi-circle-on"></i>
+        </span>
+        <input #end type="number" [min]="1" (input)="helper.InputNumberRestrict(end)" pInputText placeholder="End Ayah" />
+      </div>
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon">
+          <img src="assets/images/font.svg" alt="">
+        </span>
+        <input #end type="number" [min]="1" [max]="46" [(ngModel)]="fontSize" pInputText placeholder="Font Size" />
+        <span class="ms-2 rounded-start p-inputgroup-addon">
+          <i class="pi pi-video"></i>
+        </span>
+        <div class="w-50">
+          <p-button [label]="getPickedVideo() ?? 'Random Video'" styleClass="rounded-end w-100" class="w-100"  severity="primary" (onClick)="videoPickerVisible = true"></p-button>
+        </div>
+      </div>
+
+
+
+      <div class="p-inputgroup my-3 w-auto">
+
+        <p-button label="Generate" [disabled]="currentReciterId == '' || currentSurah == '' || !start.value || !end.value" [iconPos]="'right'"  [rounded]="true" severity="primary"  (onClick)="GetAyahsAndLoadThem(GetCurrentSurahNumber(),currentReciterId,start.value,end.value)">
+
+          <ng-template pTemplate="icon">
+
+            <img src="assets/images/generate.svg" alt="">
+          </ng-template>
+        </p-button>
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngIf="(loadedAudio || firstLoad) && !ffmpegExecuting;" class="row my-5 justify-content-center mx-auto" style="width: 90%;">
+
+    <video *ngIf="videoURL != ''" [src]="videoURL" class="col-10 col-md-6 col-lg-4" autoplay controls></video>
+  </div>
+
+</div>
+<ng-template #progress>
+  <div class="d-flex justify-content-center align-items-center" style="height: 85dvh;width: 100dvw;">
+
+    <div class="mx-auto w-50">
+      <span class="app-title">Loading {{currentLoading.name}} </span>
+      <p-toast></p-toast>
+      <p-progressBar  [value]="currentLoading.value"></p-progressBar>
+  </div>
+  </div>
+</ng-template>
+
+
+<div *ngIf="ffmpegExecuting" class="row my-5 justify-content-center mx-auto" style="width: 90%">
+
+  <div class="col-10 col-md-6 col-lg-4">
+    <div class="d-flex justify-content-between"><span>{{this.executingProgressLabel()}}</span> <span>Elapsed Time <span class="fw-bold app-title">{{this.executingTime + ' s'}}</span></span></div>
+    <p-toast></p-toast>
+    <p-progressBar [ariaValueMin]="0" [ariaValueMax]="100" [value]="executingProgress()"></p-progressBar>
+</div>
+</div>
+
+
+
+<p-dialog header="Background Video Gallery" [(visible)]="videoPickerVisible" [resizable]="true" [breakpoints]="{ '960px': '75vw' }" [style]="{width: '50vw'}">
+  <app-videos-dialog (pickedVideo)="pickedVideo = $event;videoPickerVisible=false"></app-videos-dialog>
+</p-dialog>
+</div>

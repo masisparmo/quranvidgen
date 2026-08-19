@@ -1,0 +1,18 @@
+
+@media (prefers-color-scheme:dark){
+  ::ng-deep body{
+    background-color: #333;
+    color:white;
+  }
+  .app-title{
+    color: white;
+  }
+}
+@media (prefers-color-scheme:light){
+  ::ng-deep body{
+    color:#333;
+  }
+  .app-title{
+    color: #333;
+  }
+}
