@@ -30,7 +30,6 @@ import { DialogModule } from 'primeng/dialog';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    RouterOutlet,
     InputTextModule,
     CheckboxModule,
     RadioButtonModule,

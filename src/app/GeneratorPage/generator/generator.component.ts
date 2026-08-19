@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, signal } from '@angular/core';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
-import { ProgressCallback } from '@ffmpeg/util/dist/cjs/types';
+export type ProgressCallback = (event: { progress: number; time: number }) => void;
 import { Reciter } from 'src/app/Interfaces/reciter';
 import { Surah } from 'src/app/Interfaces/surah';
 import { HelperService } from 'src/app/Services/helper.service';
@@ -50,6 +50,10 @@ export class GeneratorComponent {
       return `Video ${this.pickedVideo}`;
     }
     return undefined;
+  }
+  onVideoPicked(videoNum: any){
+    this.pickedVideo = videoNum;
+    this.videoPickerVisible = false;
   }
   async ngAfterViewInit(){
     await this.load();

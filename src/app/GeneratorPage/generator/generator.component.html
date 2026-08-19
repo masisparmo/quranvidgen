@@ -79,6 +79,6 @@
 
 
 <p-dialog header="Background Video Gallery" [(visible)]="videoPickerVisible" [resizable]="true" [breakpoints]="{ '960px': '75vw' }" [style]="{width: '50vw'}">
-  <app-videos-dialog (pickedVideo)="pickedVideo = $event;videoPickerVisible=false"></app-videos-dialog>
+  <app-videos-dialog (pickedVideo)="onVideoPicked($event)"></app-videos-dialog>
 </p-dialog>
 </div>
