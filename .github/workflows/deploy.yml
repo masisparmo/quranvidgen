@@ -27,14 +27,17 @@ jobs:
         with:
           node-version: 18
 
-      - name: Configure Git to use HTTPS for dependencies
-        run: git config --global url."https://github.com/".insteadOf git@github.com:
+      - name: Configure Git to use HTTPS for all dependencies
+        run: |
+          git config --global url."https://github.com/".insteadOf git://github.com/
+          git config --global url."https://github.com/".insteadOf ssh://git@github.com/
+          git config --global url."https://github.com/".insteadOf git@github.com:
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
       - name: Build Angular Application
-        run: npx ng build --configuration production --base-href /quranvidgen/
+        run: npm run build -- --configuration production --base-href /quranvidgen/
 
       - name: Copy index.html to 404.html & create .nojekyll
         run: |
