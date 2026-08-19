@@ -18,9 +18,6 @@ concurrency:
 
 jobs:
   build-and-deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -29,24 +26,20 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'npm'
+          node-version: 18
 
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+        run: npm install --legacy-peer-deps
 
       - name: Build Angular Application
         run: npx ng build --configuration production --base-href /quranvidgen/
 
-      - name: Copy index.html to 404.html for SPA Routing
+      - name: Copy index.html to 404.html & create .nojekyll
         run: |
           cp dist/quran-vid-gen/index.html dist/quran-vid-gen/404.html
           touch dist/quran-vid-gen/.nojekyll
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'dist/quran-vid-gen'
